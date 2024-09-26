@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicacion de Cifrado</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        header {
+            width: 100%;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .resultado textarea {
+            background-color: #f9f9f9;
+            color: #555;
+            cursor: default;
+        }
+
+        .error {
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .modal.fade .modal-dialog {
+            animation: slideIn 0.5s forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">Cifrado César</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="escitala.html">Cifrado Escítala</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#informacionModal">Información</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#guiaModal">Guía</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Cifrado César</h1>
+        <form>
+            <div class="mb-3">
+                <label for="mensaje" class="form-label">Mensaje a cifrar/descifrar:</label>
+                <textarea id="mensaje" class="form-control" placeholder="tu mensaje" rows="4"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="desplazamiento" class="form-label">Clave:</label>
+                <select id="desplazamiento" class="form-select">
+                    <option value="0" selected>0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                </select>
+            </div>
+
+            <div id="error" class="text-danger mb-3">El mensaje solo puede contener letras del alfabeto español.</div>
+
+            <div class="d-grid gap-2">
+                <button type="button" class="btn btn-primary" onclick="cifrarMensaje()">Codificar</button>
+                <button type="button" class="btn btn-success" onclick="descifrarMensaje()">Descodificar</button>
+            </div>
+
+            <div class="resultado mt-4">
+                <label for="resultado" class="form-label">Resultado:</label>
+                <div class="input-group">
+                    <textarea id="resultado" class="form-control" placeholder="tu mensaje cifrado/descifrado" rows="4" readonly></textarea>
+                    <button class="btn btn-outline-secondary" type="button" onclick="copiarTexto()">Copiar</button>
+                </div>
+                <small id="mensaje-copia" class="text-danger" style="display: none;">No hay nada que copiar.</small>
+                <small id="mensaje-exito" class="text-success" style="display: none;">Texto copiado al portapapeles.</small>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="informacionModal" tabindex="-1" aria-labelledby="informacionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="informacionModalLabel">Información sobre Cifrados</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Cifrado César:</h6>
+                    <p>El Cifrado César es una técnica de cifrado por sustitución en la que cada letra del texto original se reemplaza por otra que se encuentra un número fijo de posiciones más adelante en el alfabeto. Es uno de los métodos de cifrado más antiguos y conocidos.</p>
+                    <h6>Cifrado Escítala:</h6>
+                    <p>El Cifrado Escítala es un método de cifrado utilizado por los antiguos espartanos. Consiste en enrollar una tira de cuero con el mensaje alrededor de un bastón de un grosor específico. Al desenrollar la tira, el mensaje cifrado queda incomprensible, pero al enrollarlo en otro bastón del mismo grosor, se puede leer nuevamente.</p>
+                    <h6>Comparación:</h6>
+                    <p>Ambos cifrados son métodos históricos de protección de información, pero mientras que el Cifrado César es un cifrado por sustitución, el Cifrado Escítala es un método de transposición. El César es más vulnerable a ataques por fuerza bruta debido a su clave fija, mientras que el Escítala depende de la longitud de la tira y el diámetro del bastón para su seguridad.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="guiaModal" tabindex="-1" aria-labelledby="guiaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="guiaModalLabel">Guía de Uso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Cómo usar la aplicación web:</h6>
+                    <p>Esta aplicación permite cifrar y descifrar mensajes utilizando dos métodos diferentes: el Cifrado César y el Cifrado Escítala.</p>
+                    <h6>Pasos para usar el Cifrado César:</h6>
+                    <ol>
+                        <li>Ingresa el mensaje que deseas cifrar o descifrar en el campo "Mensaje a cifrar/descifrar".</li>
+                        <li>Selecciona la clave de desplazamiento que deseas usar para el cifrado o descifrado.</li>
+                        <li>Haz clic en "Codificar" para cifrar el mensaje o en "Descodificar" para descifrarlo.</li>
+                        <li>El resultado aparecerá en el campo "Resultado". Puedes copiar el texto cifrado o descifrado haciendo clic en el botón "Copiar".</li>
+                    </ol>
+                    <h6>Pasos para usar el Cifrado Escítala:</h6>
+                    <ol>
+                        <li>Ve a la pestaña "Cifrado Escítala" en la barra de navegación.</li>
+                        <li>Ingresa el mensaje que deseas cifrar o descifrar en el campo correspondiente.</li>
+                        <li>Introduce el diámetro del bastón en el campo adecuado (en caso de que sea parte de la funcionalidad).</li>
+                        <li>Haz clic en "Codificar" o "Descodificar" según lo que necesites.</li>
+                        <li>El mensaje cifrado o descifrado aparecerá en el área de resultado.</li>
+                    </ol>
+                    <p>Ambos métodos son históricos y no se recomiendan para proteger información sensible en la actualidad, pero son excelentes para aprender sobre criptografía.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        function cifrarMensaje() {
+            let mensaje = document.getElementById('mensaje').value.toLowerCase();
+            let desplazamiento = parseInt(document.getElementById('desplazamiento').value);
+            let resultado = '';
+
+            if (/[^a-zñ\s]/.test(mensaje)) {
+                document.getElementById('error').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('error').style.display = 'none';
+            }
+
+            for (let i = 0; i < mensaje.length; i++) {
+                let caracter = mensaje[i];
+                if (caracter === ' ') {
+                    resultado += ' ';
+                    continue;
+                }
+
+                let codigo = mensaje.charCodeAt(i);
+                let codigoCifrado = ((codigo - 97 + desplazamiento) % 27) + 97;
+
+                if (caracter === 'ñ') {
+                    codigoCifrado = ((codigo - 97 + desplazamiento) % 27) + 241;
+                }
+
+                resultado += String.fromCharCode(codigoCifrado);
+            }
+
+            document.getElementById('resultado').value = resultado;
+        }
+
+        function descifrarMensaje() {
+            let mensaje = document.getElementById('mensaje').value.toLowerCase();
+            let desplazamiento = parseInt(document.getElementById('desplazamiento').value);
+            let resultado = '';
+            if (/[^a-zñ\s]/.test(mensaje)) {
+                document.getElementById('error').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('error').style.display = 'none';
+            }
+
+            for (let i = 0; i < mensaje.length; i++) {
+                let caracter = mensaje[i];
+                if (caracter === ' ') {
+                    resultado += ' ';
+                    continue;
+                }
+
+                let codigo = mensaje.charCodeAt(i);
+                let codigoDescifrado = ((codigo - 97 - desplazamiento + 27) % 27) + 97;
+
+                if (caracter === 'ñ') {
+                    codigoDescifrado = ((codigo - 97 - desplazamiento + 27) % 27) + 241;
+                }
+
+                resultado += String.fromCharCode(codigoDescifrado);
+            }
+
+            document.getElementById('resultado').value = resultado;
+        }
+        function copiarTexto() {
+            const resultado = document.getElementById('resultado');
+            const mensajeCopia = document.getElementById('mensaje-copia');
+            const mensajeExito = document.getElementById('mensaje-exito');
+
+            if (resultado.value.trim() === "") {
+                mensajeCopia.style.display = 'inline';
+                mensajeExito.style.display = 'none';
+            } else {
+                resultado.select();
+                document.execCommand('copy');
+                mensajeCopia.style.display = 'none';
+                mensajeExito.style.display = 'inline';
+            }
+        }
+    </script>
+</body>
+
+</html>
